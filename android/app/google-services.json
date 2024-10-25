@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "555748240899",
+    "project_id": "disaster-app-514de",
+    "storage_bucket": "disaster-app-514de.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:555748240899:android:7ac223881a4325fd7f2836",
+        "android_client_info": {
+          "package_name": "com.example.disaster_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAxUYSyNPuVbt0GazlIBXOXgrEr7YS9wPo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
