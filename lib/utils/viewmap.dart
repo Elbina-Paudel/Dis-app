@@ -6,12 +6,15 @@ class MapView extends StatefulWidget {
   const MapView({super.key});
 
   @override
-  MapViewState createState() => MapViewState(); // Changed from _MapViewState to MapViewState
+  MapViewState createState() =>
+      MapViewState(); // Changed from _MapViewState to MapViewState
 }
 
-class MapViewState extends State<MapView> { // Changed from _MapViewState to MapViewState
+class MapViewState extends State<MapView> {
+  // Changed from _MapViewState to MapViewState
   late GoogleMapController mapController;
-  LatLng _currentPosition = const LatLng(27.7172, 85.3240); // Default location (Kathmandu)
+  LatLng _currentPosition =
+      const LatLng(27.7172, 85.3240); // Default location (Kathmandu)
   final Set<Marker> _markers = {};
 
   @override
@@ -26,7 +29,8 @@ class MapViewState extends State<MapView> { // Changed from _MapViewState to Map
     Location location = Location();
     var currentLocation = await location.getLocation();
     setState(() {
-      _currentPosition = LatLng(currentLocation.latitude!, currentLocation.longitude!);
+      _currentPosition =
+          LatLng(currentLocation.latitude!, currentLocation.longitude!);
     });
   }
 

@@ -5,21 +5,21 @@ class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
 
   @override
-  SignUpScreenState createState() => SignUpScreenState(); 
+  SignUpScreenState createState() => SignUpScreenState();
 }
 
-class SignUpScreenState extends State<SignUpScreen> { 
+class SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  Future<void> _signUp() async {
+  _signUp() async {
     try {
-      await _auth.createUserWithEmailAndPassword(
+      final user = await _auth.createUserWithEmailAndPassword(
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
       );
-      if (mounted) { // Check if the widget is still mounted
+      if (user.user != null) {
         Navigator.pushReplacementNamed(context, '/home');
       }
     } catch (e) {

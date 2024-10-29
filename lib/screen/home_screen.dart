@@ -1,25 +1,21 @@
 import 'dart:io';
-import 'package:disaster_app/screen/Pages/logout.dart';
-import 'package:disaster_app/screen/Pages/profile.dart';
-import 'package:disaster_app/screen/Pages/settings.dart';
 import 'package:flutter/material.dart';
-import 'package:disaster_app/utils/emergencybutton.dart';
-import 'package:disaster_app/screen/Navigators/chat.dart';
-import 'package:disaster_app/screen/Navigators/contact.dart';
-import 'package:disaster_app/screen/Navigators/humidity.dart';
-import 'package:disaster_app/screen/Navigators/video.dart';
-import 'package:disaster_app/utils/quotes.dart';
-import 'package:disaster_app/utils/slider.dart';
+import '../utils/app_routes.dart';
+import '../utils/quotes.dart';
+import '../utils/slider.dart';
+import 'Navigators/chat.dart';
+import 'Navigators/contact.dart';
+import 'Navigators/humidity.dart';
+import 'Navigators/video.dart';
+import 'Pages/logout.dart';
+import 'Pages/profile.dart';
+import 'Pages/settings.dart';
 import 'caller.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:disaster_app/utils/viewmap.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:disaster_app/screen/signin.dart';
-//import 'package:disaster_app/screen/signup.dart'; // Import your login page
 
-void main() {
-  runApp(const MyApp());
-}
+import 'splash_screen.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -27,11 +23,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: const HomePage(),
-      routes: {
-        '/login': (context) => const LoginScreen(),
-        // Add other routes as needed
-      },
+      home: const SplashScreen(),
+      debugShowCheckedModeBanner: false,
+      routes: appRoutes,
     );
   }
 }
@@ -52,7 +46,8 @@ class HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _auth.authStateChanges().listen((User? user) {
-      if (user == null && mounted) { // Check if the widget is mounted before navigation
+      if (user == null && mounted) {
+        // Check if the widget is mounted before navigation
         Navigator.of(context).pushReplacementNamed('/login');
       }
     });
@@ -61,7 +56,8 @@ class HomePageState extends State<HomePage> {
   Future<void> pickImage() async {
     final ImagePicker picker = ImagePicker();
     final XFile? image = await picker.pickImage(source: ImageSource.gallery);
-    if (image != null && mounted) { // Check if the widget is mounted before updating state
+    if (image != null && mounted) {
+      // Check if the widget is mounted before updating state
       setState(() {
         _profileImage = File(image.path);
       });
@@ -238,8 +234,8 @@ class EmergencyButtons extends StatelessWidget {
             color: Color(0xFF673AB7),
           ),
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+        Wrap(
+          //mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             _emergencyButton('🚑 Ambulance', '102'),
             _emergencyButton('👮 Police', '100'),
@@ -252,7 +248,7 @@ class EmergencyButtons extends StatelessWidget {
           onPressed: () {
             Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (context) => const MapView(), // Navigate to MapPage
+                builder: (context) => const MapView(),
               ),
             );
           },
@@ -293,11 +289,11 @@ class EmergencyRedButton extends StatelessWidget {
         width: double.infinity,
         child: ElevatedButton(
           onPressed: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => const EmergencyButton(),
-              ),
-            );
+            // Navigator.of(context).push(
+            //   MaterialPageRoute(
+            //     builder: (context) => const EmergencyButton(),
+            //   ),
+            // );
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.red,
