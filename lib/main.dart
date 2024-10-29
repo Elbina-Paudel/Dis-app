@@ -1,11 +1,10 @@
-import "package:firebase_core/firebase_core.dart";
-import "package:flutter/material.dart";
+import 'package:disaster_app/screen/home_screen.dart';
+import 'package:flutter/material.dart';
+//import 'package:firebase_core/firebase_core.dart';
 
-import "screen/home_screen.dart";
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+
+void main() {
   runApp(const MyApp());
 }
 
@@ -16,7 +15,24 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: HomeScreen(),
+      home: HomePage(), // Set HomeScreen as the starting screen
     );
   }
 }
+
+//class HomeScreen extends StatelessWidget {
+  //const HomeScreen({super.key});
+
+  //@override
+  //Widget build(BuildContext context) {
+   // return Scaffold(
+     //appBar: AppBar(
+       // title: const Text('Home Screen'),
+       // backgroundColor: Colors.deepPurple[300],
+     // ),
+     // body: const Center(
+       // child: Text('Welcome to Home Screen'),
+     //),
+   // );
+ // }
+//}
