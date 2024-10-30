@@ -2,9 +2,14 @@ import 'package:disaster_app/screen/home_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+
+import 'screen/contacts/model/emergency_contact_model.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Hive.initFlutter();
+  Hive.registerAdapter(EmergencyContactModelAdapter());
   if (kIsWeb) {
     await Firebase.initializeApp(
       options: const FirebaseOptions(

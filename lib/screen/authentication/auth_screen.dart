@@ -1,8 +1,8 @@
-import 'package:disaster_app/screen/home_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import '../authentication/signin.dart';
+import '../home/home_screen.dart';
+import 'signin.dart';
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});
@@ -35,7 +35,7 @@ class _AuthScreenState extends State<AuthScreen> {
           }
 
           if (snapshot.hasData && snapshot.data == true) {
-            return const HomePage();
+            return const HomeScreen();
           }
 
           if (snapshot.hasData && snapshot.data == false) {
