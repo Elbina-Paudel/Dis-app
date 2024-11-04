@@ -1,5 +1,9 @@
 import 'dart:io';
 
+import 'package:disaster_app/screen/Pages/gamezone.dart';
+import 'package:disaster_app/screen/Pages/logout.dart';
+import 'package:disaster_app/screen/Pages/profile.dart';
+import 'package:disaster_app/screen/Pages/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -59,25 +63,25 @@ class _HomeScreenState extends State<HomeScreen> {
                 icon: Icons.person,
                 title: 'Profile',
                 context: context,
-                page: SizedBox(),
+                page: const ProfilePage(),
               ),
               _buildDrawerItem(
                 icon: Icons.games,
                 title: 'Game Zone', // New menu item for GameZone
                 context: context,
-                page: SizedBox(), // Navigate to GameZone
+                page: const QuizGame(), // Navigate to GameZone
               ),
               _buildDrawerItem(
                 icon: Icons.settings,
                 title: 'Settings',
                 context: context,
-                page: const SizedBox(),
+                page: const SettingsPage(),
               ),
               _buildDrawerItem(
                 icon: Icons.logout,
                 title: 'Logout',
                 context: context,
-                page: const SizedBox(),
+                page: const LogoutPage(),
               ),
             ],
           ),
