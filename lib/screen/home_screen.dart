@@ -14,8 +14,9 @@ import 'caller.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:disaster_app/utils/viewmap.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
 import 'splash_screen.dart';
+import 'package:disaster_app/utils/emergencybutton.dart'; 
+import 'package:disaster_app/screen/Pages/gamezone.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -47,7 +48,6 @@ class HomePageState extends State<HomePage> {
     super.initState();
     _auth.authStateChanges().listen((User? user) {
       if (user == null && mounted) {
-        // Check if the widget is mounted before navigation
         Navigator.of(context).pushReplacementNamed('/login');
       }
     });
@@ -57,7 +57,6 @@ class HomePageState extends State<HomePage> {
     final ImagePicker picker = ImagePicker();
     final XFile? image = await picker.pickImage(source: ImageSource.gallery);
     if (image != null && mounted) {
-      // Check if the widget is mounted before updating state
       setState(() {
         _profileImage = File(image.path);
       });
@@ -115,6 +114,12 @@ class HomePageState extends State<HomePage> {
                 title: 'Profile',
                 context: context,
                 page: const ProfilePage(),
+              ),
+              _buildDrawerItem(
+                icon: Icons.games,
+                title: 'Game Zone', // New menu item for GameZone
+                context: context,
+                page: const QuizGame(), // Navigate to GameZone
               ),
               _buildDrawerItem(
                 icon: Icons.settings,
@@ -235,7 +240,6 @@ class EmergencyButtons extends StatelessWidget {
           ),
         ),
         Wrap(
-          //mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             _emergencyButton('🚑 Ambulance', '102'),
             _emergencyButton('👮 Police', '100'),
@@ -243,7 +247,7 @@ class EmergencyButtons extends StatelessWidget {
             _emergencyButton('📞 Close One', '+9779846091133'),
           ],
         ),
-        const SizedBox(height: 20), // Add space before the button
+        const SizedBox(height: 20),
         ElevatedButton(
           onPressed: () {
             Navigator.of(context).push(
@@ -289,11 +293,11 @@ class EmergencyRedButton extends StatelessWidget {
         width: double.infinity,
         child: ElevatedButton(
           onPressed: () {
-            // Navigator.of(context).push(
-            //   MaterialPageRoute(
-            //     builder: (context) => const EmergencyButton(),
-            //   ),
-            // );
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => const EmergencyButton(), // Navigate to EmergencyButton page
+              ),
+            );
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.red,

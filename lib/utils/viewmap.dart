@@ -6,50 +6,84 @@ class MapView extends StatefulWidget {
   const MapView({super.key});
 
   @override
-  MapViewState createState() =>
-      MapViewState(); // Changed from _MapViewState to MapViewState
+  MapViewState createState() => MapViewState();
 }
 
 class MapViewState extends State<MapView> {
-  // Changed from _MapViewState to MapViewState
   late GoogleMapController mapController;
-  LatLng _currentPosition =
-      const LatLng(27.7172, 85.3240); // Default location (Kathmandu)
-  final Set<Marker> _markers = {};
+  LatLng currentPosition = const LatLng(27.7172, 85.3240); // Default to Kathmandu
+  final Set<Marker> markers = {};
 
   @override
   void initState() {
     super.initState();
-    _getUserLocation();
-    _addDisasterMarkers();
+    initializeLocation();
   }
 
-  // Method to fetch user's current location
-  Future<void> _getUserLocation() async {
+  Future<void> initializeLocation() async {
+    await getUserLocation();
+    addDisasterMarkers();
+  }
+
+  Future<void> getUserLocation() async {
     Location location = Location();
-    var currentLocation = await location.getLocation();
-    setState(() {
-      _currentPosition =
-          LatLng(currentLocation.latitude!, currentLocation.longitude!);
-    });
+
+    bool serviceEnabled = await location.serviceEnabled();
+    if (!serviceEnabled) {
+      serviceEnabled = await location.requestService();
+      if (!serviceEnabled) return;
+    }
+
+    PermissionStatus permissionGranted = await location.hasPermission();
+    if (permissionGranted == PermissionStatus.denied) {
+      permissionGranted = await location.requestPermission();
+      if (permissionGranted != PermissionStatus.granted) return;
+    }
+
+    try {
+      var currentLocation = await location.getLocation();
+      if (mounted) {
+        setState(() {
+          currentPosition = LatLng(currentLocation.latitude!, currentLocation.longitude!);
+          markers.add(
+            Marker(
+              markerId: const MarkerId('userLocation'),
+              position: currentPosition,
+              infoWindow: const InfoWindow(title: 'Your Location'),
+              icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
+            ),
+          );
+        });
+
+        mapController.animateCamera(
+          CameraUpdate.newCameraPosition(
+            CameraPosition(
+              target: currentPosition,
+              zoom: 14.0,
+            ),
+          ),
+        );
+      }
+    } catch (e) {
+      print("Could not get location: $e");
+    }
   }
 
-  // Method to add markers for nearby disaster areas (example locations)
-  void _addDisasterMarkers() {
-    setState(() {
-      _markers.addAll([
-        const Marker(
-          markerId: MarkerId('disaster1'),
-          position: LatLng(27.7172, 85.3240), // Kathmandu, for example
-          infoWindow: InfoWindow(title: 'Disaster Zone 1'),
-        ),
-        const Marker(
-          markerId: MarkerId('disaster2'),
-          position: LatLng(27.7000, 85.3000), // Another nearby location
-          infoWindow: InfoWindow(title: 'Disaster Zone 2'),
-        ),
-      ]);
-    });
+  void addDisasterMarkers() {
+    markers.addAll([
+      Marker(
+        markerId: const MarkerId('disaster1'),
+        position: const LatLng(27.7172, 85.3240),
+        infoWindow: const InfoWindow(title: 'Disaster Zone 1'),
+        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueViolet),
+      ),
+      Marker(
+        markerId: const MarkerId('disaster2'),
+        position: const LatLng(27.7000, 85.3000),
+        infoWindow: const InfoWindow(title: 'Disaster Zone 2'),
+        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueViolet),
+      ),
+    ]);
   }
 
   @override
@@ -57,13 +91,24 @@ class MapViewState extends State<MapView> {
     return Scaffold(
       appBar: AppBar(title: const Text("View Map")),
       body: GoogleMap(
-        onMapCreated: (controller) => mapController = controller,
+        onMapCreated: (controller) {
+          mapController = controller;
+          mapController.animateCamera(
+            CameraUpdate.newCameraPosition(
+              CameraPosition(
+                target: currentPosition,
+                zoom: 14.0,
+              ),
+            ),
+          );
+        },
         initialCameraPosition: CameraPosition(
-          target: _currentPosition,
+          target: currentPosition,
           zoom: 14.0,
         ),
-        markers: _markers,
+        markers: markers,
         myLocationEnabled: true,
+        myLocationButtonEnabled: true,
       ),
     );
   }

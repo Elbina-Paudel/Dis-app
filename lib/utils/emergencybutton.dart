@@ -1,102 +1,125 @@
-// import 'package:flutter/material.dart';
-// import 'package:geolocator/geolocator.dart';
-// import 'package:sms_advanced/sms_advanced.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_sms/flutter_sms.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:geolocator/geolocator.dart';
+import 'dart:io';
 
-// class EmergencyButton extends StatefulWidget {
-//   const EmergencyButton({super.key});
+class EmergencyButton extends StatefulWidget {
+  const EmergencyButton({super.key});
 
-//   @override
-//   EmergencyButtonState createState() => EmergencyButtonState();
-// }
+  @override
+  _EmergencyButtonState createState() => _EmergencyButtonState();
+}
 
-// class EmergencyButtonState extends State<EmergencyButton> {
-//   Future<void> _sendEmergencySms() async {
-//     // Check for permissions
-//     LocationPermission permission = await Geolocator.checkPermission();
-//     if (permission == LocationPermission.denied) {
-//       permission = await Geolocator.requestPermission();
-//     }
+class _EmergencyButtonState extends State<EmergencyButton> {
+  String? imagePath;
 
-//     // Proceed if permission is granted
-//     if (permission == LocationPermission.always || permission == LocationPermission.whileInUse) {
-//       // Get the current location
-//       Position? position;
-//       try {
-//         position = await Geolocator.getCurrentPosition(
-//           locationSettings: const LocationSettings(
-//             accuracy: LocationAccuracy.high,
-//             distanceFilter: 10, // Meters
-//           ),
-//         );
-//       } catch (e) {
-//         if (mounted) {
-//           ScaffoldMessenger.of(context).showSnackBar(
-//             const SnackBar(content: Text('Failed to get location.')),
-//           );
-//         }
-//         return;
-//       }
+  Future<void> sendSms(String message, List<String> recipients, String? imagePath) async {
+    String result = await sendSMS(message: message, recipients: recipients)
+        .catchError((onError) {
+      // Handle errors appropriately (consider using a logging framework)
+    });
 
-//       // Format the message
-//       String message =
-//           'Emergency! I need help! Here is my location: https://maps.google.com/?q=${position.latitude},${position.longitude}';
+    // Logic to handle sending the image if needed
+    if (imagePath != null) {
+      // You may need to implement this part based on your requirements
+    }
+  }
 
-//       // Define registered numbers
-//       List<String> registeredNumbers = ['9846091133', '9823572763']; 
+  Future<void> captureImage() async {
+    final ImagePicker _picker = ImagePicker();
+    final XFile? photo = await _picker.pickImage(source: ImageSource.camera);
+    if (photo != null) {
+      setState(() {
+        imagePath = photo.path;
+      });
+    }
+  }
 
-//       // Send SMS to each registered number
-//       SmsSender sender = SmsSender();
-//       for (String number in registeredNumbers) {
-//         SmsMessage sms = SmsMessage(number, message);
-//         sender.sendSms(sms);
-//       }
+  Future<String?> getCurrentLocation() async {
+    bool serviceEnabled;
+    LocationPermission permission;
 
-//       // Show confirmation message
-//       if (mounted) {
-//         ScaffoldMessenger.of(context).showSnackBar(
-//           const SnackBar(content: Text('Emergency SMS sent.')),
-//         );
-//       }
-//     } else {
-//       if (mounted) {
-//         ScaffoldMessenger.of(context).showSnackBar(
-//           const SnackBar(content: Text('Location permission denied.')),
-//         );
-//       }
-//     }
-//   }
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return Future.error('Location services are disabled.');
+    }
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: const Text('Emergency'),
-//         backgroundColor: Colors.red,
-//       ),
-//       body: Center(
-//         child: Column(
-//           mainAxisAlignment: MainAxisAlignment.center,
-//           children: [
-//             const Text(
-//               'In an emergency, press the button below to send your location to registered contacts.',
-//               textAlign: TextAlign.center,
-//               style: TextStyle(fontSize: 20),
-//             ),
-//             const SizedBox(height: 20),
-//             ElevatedButton(
-//               onPressed: _sendEmergencySms,
-//               style: ElevatedButton.styleFrom(
-//                 backgroundColor: Colors.red,
-//                 padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 32.0),
-//               ),
-//               child: const Text(
-//                 'Send Emergency SMS',
-//                 style: TextStyle(fontSize: 18, color: Colors.white),
-//               ),
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return Future.error('Location permissions are denied');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+
+    Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    return '${position.latitude}, ${position.longitude}';
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Emergency Alert'),
+        backgroundColor: Colors.red,
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              onPressed: () async {
+                // Capture an image first
+                await captureImage();
+
+                // Get the current location
+                String? location = await getCurrentLocation();
+
+                // Send SMS with location and image path
+                if (location != null) {
+                  String message = "This is an emergency alert. Please respond immediately! Location: $location";
+                  sendSms(
+                    message,
+                    ["+9779846091133"], // Replace with the numbers you need
+                    imagePath,
+                  );
+                }
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red,
+                padding: const EdgeInsets.symmetric(vertical: 16.0),
+                shadowColor: Colors.redAccent,
+                elevation: 5,
+              ),
+              child: const Text(
+                'Send Emergency SMS',
+                style: TextStyle(fontSize: 20),
+              ),
+            ),
+            const SizedBox(height: 20), // Spacing between button and local bodies
+            const Text(
+              'Local Bodies Registered with Rescue Team:',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10), // Spacing between text and list
+            Column(
+              children: const [
+                Text('1. Local Body A'),
+                Text('2. Local Body B'),
+                Text('3. Local Body C'),
+                Text('4. Local Body D'),
+                Text('5. Local Body E'),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
