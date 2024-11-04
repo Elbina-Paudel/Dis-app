@@ -21,6 +21,7 @@ class _VideoPlaybackScreenState extends State<VideoPlaybackScreen> {
   }
 
   Future<void> _initializePlayer() async {
+    // ignore: deprecated_member_use
     _videoPlayerController = VideoPlayerController.network(widget.videoUrl);
     await _videoPlayerController.initialize();
     _chewieController = ChewieController(

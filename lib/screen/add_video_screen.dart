@@ -8,10 +8,10 @@ class AddVideoScreen extends StatefulWidget {
   const AddVideoScreen({super.key});
 
   @override
-  _AddVideoScreenState createState() => _AddVideoScreenState();
+  AddVideoScreenState createState() => AddVideoScreenState();
 }
 
-class _AddVideoScreenState extends State<AddVideoScreen> {
+class AddVideoScreenState extends State<AddVideoScreen> {
   final _titleController = TextEditingController();
   final _descriptionController = TextEditingController();
   File? _videoFile;

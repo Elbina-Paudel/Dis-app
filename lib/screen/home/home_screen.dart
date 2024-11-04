@@ -63,13 +63,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 icon: Icons.person,
                 title: 'Profile',
                 context: context,
-                page: ProfilePage(),
+                page: const ProfilePage(),
               ),
               _buildDrawerItem(
                 icon: Icons.games,
                 title: 'Game Zone', // New menu item for GameZone
                 context: context,
-                page: QuizGame(), // Navigate to GameZone
+                page: const QuizGame(), // Navigate to GameZone
               ),
               _buildDrawerItem(
                 icon: Icons.settings,
@@ -81,7 +81,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 icon: Icons.logout,
                 title: 'Logout',
                 context: context,
-                page: LogoutPage(),
+                page: const LogoutPage(),
               ),
             ],
           ),

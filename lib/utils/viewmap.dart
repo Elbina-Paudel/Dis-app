@@ -11,7 +11,8 @@ class MapView extends StatefulWidget {
 
 class MapViewState extends State<MapView> {
   late GoogleMapController mapController;
-  LatLng currentPosition = const LatLng(27.7172, 85.3240); // Default to Kathmandu
+  LatLng currentPosition =
+      const LatLng(27.7172, 85.3240); // Default to Kathmandu
   final Set<Marker> markers = {};
 
   @override
@@ -44,13 +45,15 @@ class MapViewState extends State<MapView> {
       var currentLocation = await location.getLocation();
       if (mounted) {
         setState(() {
-          currentPosition = LatLng(currentLocation.latitude!, currentLocation.longitude!);
+          currentPosition =
+              LatLng(currentLocation.latitude!, currentLocation.longitude!);
           markers.add(
             Marker(
               markerId: const MarkerId('userLocation'),
               position: currentPosition,
               infoWindow: const InfoWindow(title: 'Your Location'),
-              icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
+              icon: BitmapDescriptor.defaultMarkerWithHue(
+                  BitmapDescriptor.hueRed),
             ),
           );
         });
@@ -65,7 +68,7 @@ class MapViewState extends State<MapView> {
         );
       }
     } catch (e) {
-      print("Could not get location: $e");
+      throw '$e';
     }
   }
 

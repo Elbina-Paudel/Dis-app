@@ -7,6 +7,7 @@ import 'Navigators/chat.dart';
 import 'Navigators/contact.dart';
 import 'Navigators/humidity.dart';
 import 'Navigators/video.dart';
+import 'Pages/emergency_button.dart';
 import 'Pages/logout.dart';
 import 'Pages/profile.dart';
 import 'Pages/settings.dart';
@@ -199,11 +200,11 @@ class HomeContentPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return const Column(
       children: [
-        const QuotesWidget(),
+        QuotesWidget(),
         NewsSlider(),
-        const Expanded(
+        Expanded(
           child: Center(
             child: Text(
               'Welcome to Intelliaid',
@@ -215,9 +216,9 @@ class HomeContentPage extends StatelessWidget {
             ),
           ),
         ),
-        const EmergencyButtons(),
-        const SizedBox(height: 20),
-        const EmergencyRedButton(),
+        EmergencyButtons(),
+        SizedBox(height: 20),
+        EmergencyRedButton(),
       ],
     );
   }
@@ -292,11 +293,11 @@ class EmergencyRedButton extends StatelessWidget {
         width: double.infinity,
         child: ElevatedButton(
           onPressed: () {
-            // Navigator.of(context).push(
-            //   MaterialPageRoute(
-            //     builder: (context) => const EmergencyButton(), // Navigate to EmergencyButton page
-            //   ),
-            // );
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => const EmergencyButton(),
+              ),
+            );
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.red,
