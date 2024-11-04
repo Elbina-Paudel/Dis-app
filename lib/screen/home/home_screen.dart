@@ -22,7 +22,10 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: customAppBar(title: homeScreenItems[_currentIndex]['title']),
+      appBar: customAppBar(
+        context,
+        title: homeScreenItems[_currentIndex]['title'],
+      ),
       body: AnimatedSwitcher(
         duration: const Duration(seconds: 2),
         child: homeScreenItems[_currentIndex]['screen'],

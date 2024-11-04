@@ -58,7 +58,7 @@ class ContactScreen extends StatelessWidget {
           ],
         ),
         const Gap(16.0),
-        SosContactScreen(),
+        const SosContactScreen(),
       ],
     );
   }

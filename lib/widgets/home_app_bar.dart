@@ -1,6 +1,9 @@
+import 'package:disaster_app/constants/app_colors.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-PreferredSizeWidget customAppBar({
+PreferredSizeWidget customAppBar(
+  BuildContext context, {
   required String title,
 }) {
   return AppBar(
@@ -8,6 +11,18 @@ PreferredSizeWidget customAppBar({
       title,
       style: const TextStyle(color: Colors.white),
     ),
-    backgroundColor: const Color(0xFF673AB7),
+    actions: [
+      IconButton(
+        onPressed: () {
+          FirebaseAuth.instance.signOut();
+          Navigator.pushReplacementNamed(context, "/auth");
+        },
+        icon: Icon(
+          Icons.logout,
+          color: AppColors.instance.whiteColor,
+        ),
+      ),
+    ],
+    backgroundColor: AppColors.instance.darkBrown,
   );
 }
