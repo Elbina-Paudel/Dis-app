@@ -15,7 +15,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:disaster_app/utils/viewmap.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'splash_screen.dart';
-import 'package:disaster_app/utils/emergencybutton.dart'; 
 import 'package:disaster_app/screen/Pages/gamezone.dart';
 
 class MyApp extends StatelessWidget {
@@ -293,11 +292,11 @@ class EmergencyRedButton extends StatelessWidget {
         width: double.infinity,
         child: ElevatedButton(
           onPressed: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => const EmergencyButton(), // Navigate to EmergencyButton page
-              ),
-            );
+            // Navigator.of(context).push(
+            //   MaterialPageRoute(
+            //     builder: (context) => const EmergencyButton(), // Navigate to EmergencyButton page
+            //   ),
+            // );
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.red,
