@@ -12,13 +12,14 @@ class SettingsPageState extends State<SettingsPage> {
   bool _locationEnabled = false;
   bool _alertSoundEnabled = true;
   bool _autoUpdateEnabled = true;
+  final Color switchActiveColor = const Color(0xffbf592b);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Settings'),
-        backgroundColor: Colors.deepPurple[300],
+        backgroundColor: const Color(0xffbf592b),
       ),
       body: ListView(
         padding: const EdgeInsets.all(16.0),
@@ -32,6 +33,8 @@ class SettingsPageState extends State<SettingsPage> {
             title: 'Notifications',
             trailing: Switch(
               value: _notificationsEnabled,
+              activeColor: switchActiveColor, 
+              inactiveThumbColor: Colors.grey,
               onChanged: (value) {
                 setState(() {
                   _notificationsEnabled = value;
@@ -44,6 +47,8 @@ class SettingsPageState extends State<SettingsPage> {
             title: 'Alert Sound',
             trailing: Switch(
               value: _alertSoundEnabled,
+              activeColor: switchActiveColor, 
+              inactiveThumbColor: Colors.grey,
               onChanged: (value) {
                 setState(() {
                   _alertSoundEnabled = value;
@@ -56,6 +61,8 @@ class SettingsPageState extends State<SettingsPage> {
             title: 'Automatic Updates',
             trailing: Switch(
               value: _autoUpdateEnabled,
+              activeColor: switchActiveColor, 
+              inactiveThumbColor: Colors.grey,
               onChanged: (value) {
                 setState(() {
                   _autoUpdateEnabled = value;
@@ -73,6 +80,8 @@ class SettingsPageState extends State<SettingsPage> {
             title: 'Location Services',
             trailing: Switch(
               value: _locationEnabled,
+              activeColor: switchActiveColor, 
+              inactiveThumbColor: Colors.grey,
               onChanged: (value) {
                 setState(() {
                   _locationEnabled = value;
@@ -193,11 +202,20 @@ class SettingsPageState extends State<SettingsPage> {
           ),
           actions: [
             TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('Close'),
-            ),
+  onPressed: () {
+    Navigator.of(context).pop();
+  },
+  style: TextButton.styleFrom(
+    foregroundColor: Colors.white, // Text color
+    backgroundColor: const Color(0xffbf592b), // Button background color
+    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0), // Padding around the text
+    shape: RoundedRectangleBorder( // Shape customization
+      borderRadius: BorderRadius.circular(8.0),
+    ),
+  ),
+  child: const Text('Close'),
+)
+
           ],
         );
       },
@@ -296,7 +314,7 @@ class SettingsPageState extends State<SettingsPage> {
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 Text(
-                  'A: Yes, feedback can be submitted via the help section in the app.',
+                  'A: Yes, we welcome feedback! Please use the feedback form in the support section.',
                   style: TextStyle(fontSize: 16),
                 ),
                 SizedBox(height: 16),
@@ -307,18 +325,27 @@ class SettingsPageState extends State<SettingsPage> {
                 Text(
                   'A: Yes, we take data security seriously and comply with all privacy regulations.',
                   style: TextStyle(fontSize: 16),
-                ),
+                )
               ],
             ),
           ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('Close'),
-            ),
-          ],
+      actions: [
+  TextButton(
+    onPressed: () {
+      Navigator.of(context).pop();
+    },
+    style: TextButton.styleFrom(
+      foregroundColor: Colors.white, // Text color
+      backgroundColor: const Color(0xffbf592b), // Button background color
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0), // Padding around the text
+      shape: RoundedRectangleBorder( // Shape customization
+        borderRadius: BorderRadius.circular(8.0),
+      ),
+    ),
+    child: const Text('Close'),
+  ),
+],
+
         );
       },
     );
@@ -328,13 +355,13 @@ class SettingsPageState extends State<SettingsPage> {
     required IconData icon,
     required String title,
     Widget? trailing,
-    VoidCallback? onTap,
+    Function()? onTap,
   }) {
     return ListTile(
-      leading: Icon(icon, color: Colors.deepPurple),
+      leading: Icon(icon, color: const Color(0xffbf592b)),
       title: Text(title),
-      trailing: trailing ?? const Icon(Icons.arrow_forward),
-      onTap: onTap ?? () {},
+      trailing: trailing,
+      onTap: onTap,
     );
   }
 }

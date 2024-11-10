@@ -9,25 +9,25 @@ class HomeMainScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        const QuotesWidget(),
+    return ListView(
+      children: const [
+        QuotesWidget(),
         NewsSlider(),
-        const Expanded(
+        Expanded(
           child: Center(
             child: Text(
               'Welcome to Intelliaid',
               style: TextStyle(
                 fontSize: 28,
                 fontWeight: FontWeight.bold,
-                color: Color(0xFF673AB7),
+                color: Color(0xffbf592b),
               ),
             ),
           ),
         ),
-        const EmergencyButtons(),
-        const SizedBox(height: 20),
-        const EmergencyRedButton(),
+        EmergencyButtons(),
+        SizedBox(height: 20),
+        EmergencyRedButton(),
       ],
     );
   }

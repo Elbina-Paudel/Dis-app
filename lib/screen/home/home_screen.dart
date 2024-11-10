@@ -2,12 +2,12 @@ import 'dart:io';
 
 import 'package:disaster_app/screen/Pages/gamezone.dart';
 import 'package:disaster_app/screen/Pages/logout.dart';
-import 'package:disaster_app/screen/Pages/profile.dart';
 import 'package:disaster_app/screen/Pages/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../widgets/home_app_bar.dart';
+import '../Pages/profile.dart';
 import 'utils/home_screen_items.dart';
 import 'widgets/bottom_nav_bar.dart';
 
@@ -38,7 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Container(
           decoration: const BoxDecoration(
             gradient: LinearGradient(
-              colors: [Color(0xFF673AB7), Color(0xFFD1C4E9)],
+              colors: [Color(0xffbf592b), Color(0xffedbea4)],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
@@ -57,7 +57,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             as ImageProvider<Object>,
                   ),
                 ),
-                decoration: const BoxDecoration(color: Color(0xFF673AB7)),
+                decoration: const BoxDecoration(color: Color(0xffbf592b)),
               ),
               _buildDrawerItem(
                 icon: Icons.person,

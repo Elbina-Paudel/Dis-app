@@ -19,6 +19,16 @@ class WeatherPageState extends State<WeatherPage> {
     forecastData = WeatherService().fetchFiveDayForecast('Kathmandu'); // Replace with desired city
   }
 
+  String getDangerStatus(double rainfall) {
+    if (rainfall < 2) {
+      return 'Low Risk';
+    } else if (rainfall < 10) {
+      return 'Medium Risk';
+    } else {
+      return 'High Risk';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,6 +58,7 @@ class WeatherPageState extends State<WeatherPage> {
                 final temperature = data['main']['temp'];
                 final humidity = data['main']['humidity'];
                 final rain = data['rain'] != null ? data['rain']['1h'] : 0.0;
+                final dangerStatus = getDangerStatus(rain);
 
                 return Padding(
                   padding: const EdgeInsets.all(16.0),
@@ -64,6 +75,15 @@ class WeatherPageState extends State<WeatherPage> {
                       Text(
                         'Rain: $rain mm',
                         style: const TextStyle(fontSize: 18),
+                      ),
+                      Text(
+                        'Danger Status: $dangerStatus',
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: dangerStatus == 'High Risk' ? Colors.red :
+                                 dangerStatus == 'Medium Risk' ? Colors.orange : Colors.green,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ],
                   ),
@@ -99,6 +119,7 @@ class WeatherPageState extends State<WeatherPage> {
                     final temperature = forecast['temperature'];
                     final humidity = forecast['humidity'];
                     final rain = forecast['rain'];
+                    final dangerStatus = getDangerStatus(rain);
 
                     return Card(
                       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
@@ -117,6 +138,14 @@ class WeatherPageState extends State<WeatherPage> {
                             Text('Temperature: $temperature°C'),
                             Text('Humidity: $humidity%'),
                             Text('Rain: $rain mm'),
+                            Text(
+                              'Danger Status: $dangerStatus',
+                              style: TextStyle(
+                                color: dangerStatus == 'High Risk' ? Colors.red :
+                                       dangerStatus == 'Medium Risk' ? Colors.orange : Colors.green,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                           ],
                         ),
                       ),

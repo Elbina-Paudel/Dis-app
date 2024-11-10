@@ -4,29 +4,49 @@ class QuizGame extends StatefulWidget {
   const QuizGame({super.key}); // Named key parameter
 
   @override
-  _QuizGameState createState() => _QuizGameState();
+  QuizGameState createState() => QuizGameState();
 }
 
-class _QuizGameState extends State<QuizGame> {
+class QuizGameState extends State<QuizGame> {
   final List<Map<String, dynamic>> _questions = [
     {
       'question': 'What should you do during an earthquake?',
-      'options': ['Stay indoors', 'Run outside', 'Stay calm and find cover', 'Panic'],
+      'options': [
+        'Stay indoors',
+        'Run outside',
+        'Stay calm and find cover',
+        'Panic'
+      ],
       'answer': 'Stay calm and find cover',
     },
     {
       'question': 'What is the safest way to protect yourself from floods?',
-      'options': ['Climb to higher ground', 'Hide in your basement', 'Drive away', 'Ignore warnings'],
+      'options': [
+        'Climb to higher ground',
+        'Hide in your basement',
+        'Drive away',
+        'Ignore warnings'
+      ],
       'answer': 'Climb to higher ground',
     },
     {
       'question': 'What should you do in case of a tornado?',
-      'options': ['Stay outside and watch it', 'Take shelter in a basement or interior room', 'Run to a hilltop', 'Drive away quickly'],
+      'options': [
+        'Stay outside and watch it',
+        'Take shelter in a basement or interior room',
+        'Run to a hilltop',
+        'Drive away quickly'
+      ],
       'answer': 'Take shelter in a basement or interior room',
     },
     {
       'question': 'What is a common sign of an impending tsunami?',
-      'options': ['Strong winds', 'Sudden withdrawal of water from the shore', 'Dark clouds', 'Heavy rain'],
+      'options': [
+        'Strong winds',
+        'Sudden withdrawal of water from the shore',
+        'Dark clouds',
+        'Heavy rain'
+      ],
       'answer': 'Sudden withdrawal of water from the shore',
     },
     {
@@ -36,7 +56,12 @@ class _QuizGameState extends State<QuizGame> {
     },
     {
       'question': 'What should you do if caught in a wildfire?',
-      'options': ['Run towards the fire', 'Stay low to the ground and cover your mouth', 'Ignore it', 'Look for high ground'],
+      'options': [
+        'Run towards the fire',
+        'Stay low to the ground and cover your mouth',
+        'Ignore it',
+        'Look for high ground'
+      ],
       'answer': 'Stay low to the ground and cover your mouth',
     },
     {
@@ -45,43 +70,84 @@ class _QuizGameState extends State<QuizGame> {
       'answer': 'Heavy rain',
     },
     {
-      'question': 'What type of information should be included in an emergency plan?',
-      'options': ['Contact numbers', 'Meeting places', 'Escape routes', 'All of the above'],
+      'question':
+          'What type of information should be included in an emergency plan?',
+      'options': [
+        'Contact numbers',
+        'Meeting places',
+        'Escape routes',
+        'All of the above'
+      ],
       'answer': 'All of the above',
     },
     {
       'question': 'How often should you check your emergency supplies?',
-      'options': ['Every month', 'Once a year', 'Only when disasters occur', 'Never'],
+      'options': [
+        'Every month',
+        'Once a year',
+        'Only when disasters occur',
+        'Never'
+      ],
       'answer': 'Every month',
     },
     {
       'question': 'What is a good way to stay informed during a disaster?',
-      'options': ['Social media', 'Local news stations', 'Ignoring warnings', 'All of the above'],
+      'options': [
+        'Social media',
+        'Local news stations',
+        'Ignoring warnings',
+        'All of the above'
+      ],
       'answer': 'Local news stations',
     },
     {
       'question': 'During a flood, what is the safest way to evacuate?',
-      'options': ['Walking through water', 'Using a boat', 'Driving through flooded roads', 'Staying put'],
+      'options': [
+        'Walking through water',
+        'Using a boat',
+        'Driving through flooded roads',
+        'Staying put'
+      ],
       'answer': 'Using a boat',
     },
     {
       'question': 'What should you do if you receive a tsunami warning?',
-      'options': ['Ignore it', 'Evacuate to higher ground immediately', 'Stay on the beach', 'Call a friend'],
+      'options': [
+        'Ignore it',
+        'Evacuate to higher ground immediately',
+        'Stay on the beach',
+        'Call a friend'
+      ],
       'answer': 'Evacuate to higher ground immediately',
     },
     {
       'question': 'What are aftershocks?',
-      'options': ['Small earthquakes following a larger one', 'Thunderstorms', 'Flood warnings', 'None of the above'],
+      'options': [
+        'Small earthquakes following a larger one',
+        'Thunderstorms',
+        'Flood warnings',
+        'None of the above'
+      ],
       'answer': 'Small earthquakes following a larger one',
     },
     {
       'question': 'What should you not do during a hurricane?',
-      'options': ['Stay indoors', 'Evacuate if told to do so', 'Stay near windows', 'Prepare supplies'],
+      'options': [
+        'Stay indoors',
+        'Evacuate if told to do so',
+        'Stay near windows',
+        'Prepare supplies'
+      ],
       'answer': 'Stay near windows',
     },
     {
       'question': 'Which of these is a signal of an impending storm?',
-      'options': ['Calm weather', 'Increased humidity', 'Sudden drops in temperature', 'Birds flying away'],
+      'options': [
+        'Calm weather',
+        'Increased humidity',
+        'Sudden drops in temperature',
+        'Birds flying away'
+      ],
       'answer': 'Increased humidity',
     },
     {
@@ -90,28 +156,49 @@ class _QuizGameState extends State<QuizGame> {
       'answer': 'Avoid traveling if possible',
     },
     {
-      'question': 'Which emergency kit item is essential for signaling for help?',
+      'question':
+          'Which emergency kit item is essential for signaling for help?',
       'options': ['A whistle', 'A snack', 'A blanket', 'A pillow'],
       'answer': 'A whistle',
     },
     {
       'question': 'What does the term “shelter in place” mean?',
-      'options': ['Evacuate immediately', 'Stay where you are and protect yourself', 'Go outside', 'Move to the basement'],
+      'options': [
+        'Evacuate immediately',
+        'Stay where you are and protect yourself',
+        'Go outside',
+        'Move to the basement'
+      ],
       'answer': 'Stay where you are and protect yourself',
     },
     {
       'question': 'What is a disaster recovery plan?',
-      'options': ['Plan for getting supplies', 'Plan for recovering after a disaster', 'Plan for avoiding disasters', 'None of the above'],
+      'options': [
+        'Plan for getting supplies',
+        'Plan for recovering after a disaster',
+        'Plan for avoiding disasters',
+        'None of the above'
+      ],
       'answer': 'Plan for recovering after a disaster',
     },
     {
       'question': 'How can you help your community prepare for disasters?',
-      'options': ['Ignore warnings', 'Volunteer', 'Spread misinformation', 'Stay indoors'],
+      'options': [
+        'Ignore warnings',
+        'Volunteer',
+        'Spread misinformation',
+        'Stay indoors'
+      ],
       'answer': 'Volunteer',
     },
     {
       'question': 'Why is it important to have an emergency contact list?',
-      'options': ['To win prizes', 'To stay connected during disasters', 'To keep your phone charged', 'None of the above'],
+      'options': [
+        'To win prizes',
+        'To stay connected during disasters',
+        'To keep your phone charged',
+        'None of the above'
+      ],
       'answer': 'To stay connected during disasters',
     },
   ];
@@ -176,15 +263,30 @@ class _QuizGameState extends State<QuizGame> {
   }
 
   Widget _buildOptionButton(String option) {
-    return ElevatedButton(
-      style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.all(
-            _showAnswer && _questions[_questionIndex]['answer'] == option
-                ? Colors.green
-                : Colors.blue),
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 8),
+      decoration: BoxDecoration(
+        color: const Color(0xffbf592b), // Background color for option button
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: const [
+          BoxShadow(
+            color: Colors.black54,
+            offset: Offset(2, 2),
+            blurRadius: 5,
+          ),
+        ],
       ),
-      onPressed: () => _checkAnswer(option),
-      child: Text(option),
+      child: ElevatedButton(
+        style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all(Colors.transparent),
+          padding: MaterialStateProperty.all(const EdgeInsets.all(16)),
+        ),
+        onPressed: () => _checkAnswer(option),
+        child: Text(
+          option,
+          style: const TextStyle(color: Colors.white, fontSize: 18), // White text
+        ),
+      ),
     );
   }
 
@@ -193,6 +295,7 @@ class _QuizGameState extends State<QuizGame> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Disaster Safety Quiz'),
+        backgroundColor: const Color(0xffbf592b), // Theme color
         actions: [
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -205,54 +308,59 @@ class _QuizGameState extends State<QuizGame> {
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xfff7f3e9), Color(0xffe8f4f8)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text(
-              'Question ${_questionIndex + 1} of ${_questions.length}',
-              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 20),
+            if (_showHint) ...[
+              const Text(
+                'Hint: Think about safety procedures!',
+                style: TextStyle(fontSize: 16, color: Colors.black54),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 8),
+            ],
             Text(
               _questions[_questionIndex]['question'],
-              style: const TextStyle(fontSize: 18),
-            ),
-            const SizedBox(height: 20),
-            ..._questions[_questionIndex]['options']
-                .map<Widget>((option) => _buildOptionButton(option)),
-            if (_showAnswer) ...[
-              const SizedBox(height: 20),
-              AnimatedOpacity(
-                opacity: _showAnswer ? 1 : 0,
-                duration: const Duration(milliseconds: 300),
-                child: Text(
-                  _isCorrect ? 'Correct!' : 'Incorrect!',
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: _isCorrect ? Colors.green : Colors.red,
-                  ),
-                ),
+              style: const TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Color(0xffbf592b), // Question text color
               ),
-            ],
-            const SizedBox(height: 20),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 16),
+            ..._questions[_questionIndex]['options']
+                .map<Widget>((option) => _buildOptionButton(option))
+                .toList(),
+            const SizedBox(height: 16),
             ElevatedButton(
-              onPressed: _showHint ? null : _useHint,
+              onPressed: _useHint,
               child: const Text('Use Hint'),
             ),
-            if (_showHint)
-              const Text('Hint: Think about what you would do in this situation!'),
+            if (_showAnswer) ...[
+              const SizedBox(height: 16),
+              Text(
+                _isCorrect ? 'Correct!' : 'Wrong!',
+                style: TextStyle(
+                  fontSize: 20,
+                  color: _isCorrect ? Colors.green : Colors.red,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ],
           ],
         ),
       ),
     );
   }
-}
-
-void main() {
-  runApp(const MaterialApp(
-    debugShowCheckedModeBanner: false,
-    home: QuizGame(),
-  ));
-}
+}   

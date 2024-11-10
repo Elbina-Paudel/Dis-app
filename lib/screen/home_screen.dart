@@ -7,6 +7,7 @@ import 'Navigators/chat.dart';
 import 'Navigators/contact.dart';
 import 'Navigators/humidity.dart';
 import 'Navigators/video.dart';
+import 'Pages/emergency_button.dart';
 import 'Pages/logout.dart';
 import 'Pages/profile.dart';
 import 'Pages/settings.dart';
@@ -199,25 +200,25 @@ class HomeContentPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return const Column(
       children: [
-        const QuotesWidget(),
+        QuotesWidget(),
         NewsSlider(),
-        const Expanded(
+        Expanded(
           child: Center(
             child: Text(
               'Welcome to Intelliaid',
               style: TextStyle(
                 fontSize: 28,
                 fontWeight: FontWeight.bold,
-                color: Color(0xFF673AB7),
+                color: Color(0xffbf592b),
               ),
             ),
           ),
         ),
-        const EmergencyButtons(),
-        const SizedBox(height: 20),
-        const EmergencyRedButton(),
+        EmergencyButtons(),
+        SizedBox(height: 20),
+        EmergencyRedButton(),
       ],
     );
   }
@@ -235,7 +236,7 @@ class EmergencyButtons extends StatelessWidget {
           style: TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.bold,
-            color: Color(0xFF673AB7),
+            color: Color(0xffbf592b),
           ),
         ),
         Wrap(
@@ -256,7 +257,7 @@ class EmergencyButtons extends StatelessWidget {
             );
           },
           style: ElevatedButton.styleFrom(
-            backgroundColor: const Color(0xFF673AB7),
+            backgroundColor: const Color(0xffbf592b),
             foregroundColor: Colors.white,
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
             textStyle: const TextStyle(fontSize: 16),
@@ -271,8 +272,8 @@ class EmergencyButtons extends StatelessWidget {
     return ElevatedButton(
       onPressed: () => Caller.callNumber(number),
       style: ElevatedButton.styleFrom(
-        backgroundColor: const Color(0xFF673AB7),
-        foregroundColor: Colors.white,
+        backgroundColor: const Color(0xffbf592b), // Set the background color to 0xffbf592b
+        foregroundColor: Colors.white, // Set the text color to white
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
         textStyle: const TextStyle(fontSize: 16),
       ),
@@ -292,11 +293,11 @@ class EmergencyRedButton extends StatelessWidget {
         width: double.infinity,
         child: ElevatedButton(
           onPressed: () {
-            // Navigator.of(context).push(
-            //   MaterialPageRoute(
-            //     builder: (context) => const EmergencyButton(), // Navigate to EmergencyButton page
-            //   ),
-            // );
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => const EmergencyButton(),
+              ),
+            );
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.red,
