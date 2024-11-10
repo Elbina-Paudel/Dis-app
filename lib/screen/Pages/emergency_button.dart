@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'dart:io';
 
 class EmergencyButton extends StatelessWidget {
   const EmergencyButton({super.key});
@@ -40,32 +42,45 @@ class EmergencyButton extends StatelessWidget {
     return await picker.pickImage(source: ImageSource.camera);
   }
 
-  Future<void> sendWhatsAppMessage(String toNumber, String messageBody, String? mediaUrl) async {
+  Future<String?> _uploadImageToFirebase(XFile image) async {
+    try {
+      final Reference storageRef = FirebaseStorage.instance
+          .ref()
+          .child("emergency_images/${image.name}");
+      final UploadTask uploadTask = storageRef.putFile(File(image.path));
+      final TaskSnapshot downloadUrl = await uploadTask;
+      return await downloadUrl.ref.getDownloadURL();
+    } catch (e) {
+      print("Failed to upload image: $e");
+      return null;
+    }
+  }
+
+  Future<void> sendMMS(String toNumber, String body, String? mediaUrl) async {
     final String accountSid = dotenv.env['TWILIO_ACCOUNT_SID'] ?? "";
     final String authToken = dotenv.env['TWILIO_AUTH_TOKEN'] ?? "";
-    final String fromNumber = dotenv.env['TWILIO_WHATSAPP_NUMBER'] ?? ""; // e.g., 'whatsapp:+1234567890'
+    final String fromNumber = dotenv.env['TWILIO_PHONE_NUMBER'] ?? "";
 
-    final Uri uri = Uri.parse('https://api.twilio.com/2010-04-01/Accounts/$accountSid/Messages.json');
+    final Uri uri = Uri.parse(
+        "https://api.twilio.com/2010-04-01/Accounts/$accountSid/Messages.json");
 
-    Map<String, String> headers = {
-      'Authorization': 'Basic ' + base64Encode(utf8.encode('$accountSid:$authToken')),
-      'Content-Type': 'application/x-www-form-urlencoded'
-    };
-
-    Map<String, String> body = {
-      'To': 'whatsapp:$toNumber',
-      'From': fromNumber,
-      'Body': messageBody,
-    };
-
-    if (mediaUrl != null) {
-      body['MediaUrl'] = mediaUrl;
-    }
-
-    final response = await http.post(uri, headers: headers, body: body);
+    final response = await http.post(
+      uri,
+      headers: {
+        'Authorization':
+            'Basic ${base64Encode(utf8.encode('$accountSid:$authToken'))}',
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: {
+        'From': fromNumber,
+        'To': toNumber,
+        'Body': body,
+        if (mediaUrl != null) 'MediaUrl': mediaUrl,
+      },
+    );
 
     if (response.statusCode == 201) {
-      print("Message sent successfully.");
+      print("Message sent successfully!");
     } else {
       print("Failed to send message: ${response.body}");
     }
@@ -75,26 +90,32 @@ class EmergencyButton extends StatelessWidget {
   Widget build(BuildContext context) {
     Future<void> sendMessage() async {
       try {
-        // Get the current location
+        XFile? image = await _pickImage();
         Position position = await _getCurrentLocation();
-        String locationMessage =
+
+        String messageBody =
             "I'm in danger! My current location is: https://maps.google.com/?q=${position.latitude},${position.longitude}";
 
-        // Capture or select an image
-        XFile? image = await _pickImage();
-        
-        // Here, you would typically upload the image to a cloud storage service and get a URL
-        // For simplicity, let's assume `imageUrl` is a placeholder URL
-        String? imageUrl = image?.path; // Replace this with your image upload logic if needed
+        String? imageUrl;
+        if (image != null) {
+          imageUrl = await _uploadImageToFirebase(image);
+        }
 
-        // Send WhatsApp message with location and optional image URL
-        await sendWhatsAppMessage(
+        // Send MMS with HTTP request
+        await sendMMS(
           dotenv.env['TO_NUMBER'] ?? "",
-          "$locationMessage. Sending help with this photo.",
+          messageBody,
           imageUrl,
+        );
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Emergency alert sent successfully!')),
         );
       } catch (e) {
         print("Error: $e");
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Failed to send emergency alert.')),
+        );
       }
     }
 

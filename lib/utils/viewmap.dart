@@ -1,6 +1,8 @@
+import 'package:disaster_app/widgets/home_app_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:location/location.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong2/latlong.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MapView extends StatefulWidget {
   const MapView({super.key});
@@ -10,108 +12,80 @@ class MapView extends StatefulWidget {
 }
 
 class MapViewState extends State<MapView> {
-  late GoogleMapController mapController;
-  LatLng currentPosition =
-      const LatLng(27.7172, 85.3240); // Default to Kathmandu
-  final Set<Marker> markers = {};
+  // Default to Kathmandu
+  LatLng currentPosition = const LatLng(27.7172, 85.3240);
+  List<Marker> markers = [];
 
   @override
   void initState() {
     super.initState();
-    initializeLocation();
+    initializeMarkers();
   }
 
-  Future<void> initializeLocation() async {
-    await getUserLocation();
-    addDisasterMarkers();
+  void initializeMarkers() {
+    // Add current location marker
+    markers.add(
+      Marker(
+        point: currentPosition,
+        child: const Icon(
+          Icons.location_on,
+          color: Colors.red,
+          size: 35,
+        ),
+      ),
+    );
+
+    // Add nearby disaster markers
+    addNearbyDisasterMarkers();
   }
 
-  Future<void> getUserLocation() async {
-    Location location = Location();
+  void addNearbyDisasterMarkers() {
+    List<LatLng> disasterLocations = [
+      const LatLng(27.7172, 85.3240),
+      const LatLng(27.7000, 85.3000),
+      const LatLng(27.7050, 85.3100),
+    ];
 
-    bool serviceEnabled = await location.serviceEnabled();
-    if (!serviceEnabled) {
-      serviceEnabled = await location.requestService();
-      if (!serviceEnabled) return;
-    }
-
-    PermissionStatus permissionGranted = await location.hasPermission();
-    if (permissionGranted == PermissionStatus.denied) {
-      permissionGranted = await location.requestPermission();
-      if (permissionGranted != PermissionStatus.granted) return;
-    }
-
-    try {
-      var currentLocation = await location.getLocation();
-      if (mounted) {
-        setState(() {
-          currentPosition =
-              LatLng(currentLocation.latitude!, currentLocation.longitude!);
-          markers.add(
-            Marker(
-              markerId: const MarkerId('userLocation'),
-              position: currentPosition,
-              infoWindow: const InfoWindow(title: 'Your Location'),
-              icon: BitmapDescriptor.defaultMarkerWithHue(
-                  BitmapDescriptor.hueRed),
-            ),
-          );
-        });
-
-        mapController.animateCamera(
-          CameraUpdate.newCameraPosition(
-            CameraPosition(
-              target: currentPosition,
-              zoom: 14.0,
-            ),
+    for (var location in disasterLocations) {
+      markers.add(
+        Marker(
+          point: location,
+          child: const Icon(
+            Icons.warning,
+            color: Colors.purple,
+            size: 35,
           ),
-        );
-      }
-    } catch (e) {
-      throw '$e';
+        ),
+      );
     }
-  }
-
-  void addDisasterMarkers() {
-    markers.addAll([
-      Marker(
-        markerId: const MarkerId('disaster1'),
-        position: const LatLng(27.7172, 85.3240),
-        infoWindow: const InfoWindow(title: 'Disaster Zone 1'),
-        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueViolet),
-      ),
-      Marker(
-        markerId: const MarkerId('disaster2'),
-        position: const LatLng(27.7000, 85.3000),
-        infoWindow: const InfoWindow(title: 'Disaster Zone 2'),
-        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueViolet),
-      ),
-    ]);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("View Map")),
-      body: GoogleMap(
-        onMapCreated: (controller) {
-          mapController = controller;
-          mapController.animateCamera(
-            CameraUpdate.newCameraPosition(
-              CameraPosition(
-                target: currentPosition,
-                zoom: 14.0,
-              ),
-            ),
-          );
-        },
-        initialCameraPosition: CameraPosition(
-          target: currentPosition,
-          zoom: 14.0,
+      appBar: customAppBar(context, title: "View Map"),
+      body: FlutterMap(
+        options: MapOptions(
+          initialCenter: currentPosition,
+          minZoom: 9.2,
         ),
-        markers: markers,
-        myLocationEnabled: true,
-        myLocationButtonEnabled: true,
+        children: [
+          TileLayer(
+            urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+            userAgentPackageName: 'com.example.app',
+          ),
+          MarkerLayer(markers: markers),
+          RichAttributionWidget(
+            attributions: [
+              TextSourceAttribution(
+                'OpenStreetMap contributors',
+                onTap: () => launchUrl(
+                  Uri.parse('https://openstreetmap.org/copyright'),
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
