@@ -11,10 +11,15 @@ class QuotesWidget extends StatefulWidget {
 
 class QuotesWidgetState extends State<QuotesWidget> {
   final List<String> _quotes = [
-    "Believe in yourself!",
+    "Preparedness is the only way we can combat a natural disaster.!",
+    "A community that is prepared can overcome even the most devastating disaster.",
     "Every day is a new beginning.",
-    "Stay positive and happy.",
-    "Work hard and never give up.",
+    "By failing to prepare, you are preparing to fail.",
+    "Hope for the best, but prepare for the worst.",
+    "Disaster preparedness should be a way of life, not a one-time event.",
+    "In times of peace, prepare for war. In times of safety, prepare for disaster.",
+    "Strength doesn’t come from what you can do. It comes from overcoming the things you thought you couldn’t.",
+    "We cannot stop natural disasters, but we can arm ourselves with knowledge: so many lives wouldn’t have to be lost if there was enough disaster preparedness.",
     "The best way to predict the future is to create it."
   ];
   int _currentQuoteIndex = 0;

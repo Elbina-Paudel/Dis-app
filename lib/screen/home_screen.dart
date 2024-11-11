@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import '../utils/app_routes.dart';
-import '../utils/quotes.dart';
 import '../utils/slider.dart';
 import 'Navigators/chat.dart';
 import 'Navigators/contact.dart';
@@ -202,7 +201,6 @@ class HomeContentPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Column(
       children: [
-        QuotesWidget(),
         NewsSlider(),
         Expanded(
           child: Center(
@@ -272,7 +270,8 @@ class EmergencyButtons extends StatelessWidget {
     return ElevatedButton(
       onPressed: () => Caller.callNumber(number),
       style: ElevatedButton.styleFrom(
-        backgroundColor: const Color(0xffbf592b), // Set the background color to 0xffbf592b
+        backgroundColor:
+            const Color(0xffbf592b), // Set the background color to 0xffbf592b
         foregroundColor: Colors.white, // Set the text color to white
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
         textStyle: const TextStyle(fontSize: 16),
@@ -307,7 +306,10 @@ class EmergencyRedButton extends StatelessWidget {
           ),
           child: const Text(
             'Emergency Alert',
-            style: TextStyle(fontSize: 20),
+            style: TextStyle(
+              fontSize: 20,
+              color: Colors.white,
+            ),
           ),
         ),
       ),
