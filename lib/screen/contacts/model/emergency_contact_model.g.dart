@@ -16,10 +16,11 @@ class EmergencyContactModelAdapter extends TypeAdapter<EmergencyContactModel> {
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return EmergencyContactModel()
-      ..fullname = fields[0] as String?
-      ..number = fields[1] as int?
-      ..address = fields[2] as String?;
+    return EmergencyContactModel(
+      fullname: fields[0] as String?,
+      number: fields[1] as int?,
+      address: fields[2] as String?,
+    );
   }
 
   @override

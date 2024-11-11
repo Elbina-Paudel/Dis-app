@@ -1,4 +1,6 @@
+import 'package:disaster_app/helper/app_toast.dart';
 import 'package:disaster_app/screen/contacts/model/emergency_contact_model.dart';
+import 'package:disaster_app/widgets/home_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
@@ -20,59 +22,72 @@ class _AddEmergencyContactState extends State<AddEmergencyContact> {
   final TextEditingController _address = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(32.0),
-      child: Form(
-        child: ListView(
-          children: [
-            const Center(
-              child: Text(
-                "Add Contact Details",
-                style: TextStyle(
-                  fontSize: 24.0,
-                  fontWeight: FontWeight.w700,
+    return Scaffold(
+      appBar: customAppBar(context, title: "Create Contact"),
+      body: Padding(
+        padding: const EdgeInsets.all(32.0),
+        child: Form(
+          child: ListView(
+            children: [
+              const Center(
+                child: Text(
+                  "Add Contact Details",
+                  style: TextStyle(
+                    fontSize: 24.0,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
               ),
-            ),
-            const Gap(24),
-            TextFormField(
-              controller: _fullname,
-              decoration: const InputDecoration(
-                hintText: "Enter Fullname",
-                labelText: "Fullname",
-                border: OutlineInputBorder(),
+              const Gap(24),
+              TextFormField(
+                controller: _fullname,
+                decoration: const InputDecoration(
+                  hintText: "Enter Fullname",
+                  labelText: "Fullname",
+                  border: OutlineInputBorder(),
+                ),
               ),
-            ),
-            const Gap(24),
-            TextFormField(
-              controller: _number,
-              decoration: const InputDecoration(
-                hintText: "Enter Contact",
-                labelText: "Contact",
-                border: OutlineInputBorder(),
+              const Gap(24),
+              TextFormField(
+                controller: _number,
+                decoration: const InputDecoration(
+                  hintText: "Enter Contact",
+                  labelText: "Contact",
+                  border: OutlineInputBorder(),
+                ),
               ),
-            ),
-            const Gap(24),
-            TextFormField(
-              controller: _address,
-              decoration: const InputDecoration(
-                hintText: "Address",
-                labelText: "Enter Address",
-                border: OutlineInputBorder(),
+              const Gap(24),
+              TextFormField(
+                controller: _address,
+                decoration: const InputDecoration(
+                  hintText: "Address",
+                  labelText: "Enter Address",
+                  border: OutlineInputBorder(),
+                ),
               ),
-            ),
-            const Gap(32),
-            ElevatedButton(
-              onPressed: () async {
-                // String fullname = _fullname.text.trim();
-                // int number = int.parse(_number.text);
-                // String address = _address.text;
-                var data = EmergencyContactModel();
-                await _emergencyContactService.addContact(data);
-              },
-              child: const Text("Add"),
-            ),
-          ],
+              const Gap(32),
+              ElevatedButton(
+                onPressed: () async {
+                  String fullname = _fullname.text.trim();
+                  int number = int.parse(_number.text);
+                  String address = _address.text;
+                  var data = EmergencyContactModel(
+                    fullname: fullname,
+                    address: address,
+                    number: number,
+                  );
+                  await _emergencyContactService.addContact(data);
+
+                  _fullname.clear();
+                  _address.clear();
+                  _number.clear();
+
+                  appToast("Contact Added Successfully");
+                },
+                child: const Text("Add"),
+              ),
+            ],
+          ),
         ),
       ),
     );

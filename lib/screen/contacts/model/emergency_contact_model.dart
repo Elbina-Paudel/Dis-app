@@ -12,4 +12,10 @@ class EmergencyContactModel {
 
   @HiveField(2)
   String? address;
+
+  EmergencyContactModel({
+    required this.fullname,
+    required this.number,
+    required this.address,
+  });
 }
