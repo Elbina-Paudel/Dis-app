@@ -278,13 +278,14 @@ class QuizGameState extends State<QuizGame> {
       ),
       child: ElevatedButton(
         style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all(Colors.transparent),
-          padding: MaterialStateProperty.all(const EdgeInsets.all(16)),
+          backgroundColor: WidgetStateProperty.all(Colors.transparent),
+          padding: WidgetStateProperty.all(const EdgeInsets.all(16)),
         ),
         onPressed: () => _checkAnswer(option),
         child: Text(
           option,
-          style: const TextStyle(color: Colors.white, fontSize: 18), // White text
+          style:
+              const TextStyle(color: Colors.white, fontSize: 18), // White text
         ),
       ),
     );
@@ -363,4 +364,4 @@ class QuizGameState extends State<QuizGame> {
       ),
     );
   }
-}   
+}

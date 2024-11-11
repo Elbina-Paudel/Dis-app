@@ -1,7 +1,9 @@
-// profile_page.dart
-
 import 'dart:io';
+
+import 'package:disaster_app/widgets/home_app_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -12,49 +14,72 @@ class ProfilePage extends StatefulWidget {
 }
 
 class ProfilePageState extends State<ProfilePage> {
-  File? _profileImage; // Variable to store the profile image
-  final picker = ImagePicker(); // Image picker instance
+  File? _profileImage;
+  final picker = ImagePicker();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  DocumentSnapshot? _userData;
 
   Future<void> pickImage() async {
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-    setState(() {
-      _profileImage = pickedFile != null ? File(pickedFile.path) : null; // Update profile image
-    });
+    if (pickedFile != null) {
+      setState(() {
+        _profileImage = File(pickedFile.path);
+        // Save to Hive or local storage if needed
+      });
+    }
+  }
+
+  // Fetch the user's data from Firestore
+  Future<void> _fetchUserData() async {
+    final userId = _auth.currentUser?.uid;
+    if (userId != null) {
+      final snapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .get();
+      setState(() {
+        _userData = snapshot;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchUserData();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Profile'),
-        backgroundColor:  const Color(0xffbf592b),
-      ),
+      appBar: customAppBar(context, title: "Profile"),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            GestureDetector(
-              onTap: pickImage, // Trigger image selection on tap
-              child: CircleAvatar(
-                radius: 50,
-                backgroundImage: _profileImage != null
-                    ? FileImage(_profileImage!)
-                    : const AssetImage('assets/default_profile.png') as ImageProvider,
-              ),
-            ),
-            const SizedBox(height: 20),
-            _buildProfileField("Name", "Elbina Paudel"),
-            _buildProfileField("Address", "Kathmandu, Nepal"),
-            _buildProfileField("Phone Number", "+977-1234567890"),
-            _buildProfileField("Education", "Bachelor of Engineering"),
-            _buildProfileField("Email", "elbinapaudel@gmail.com"),
-          ],
-        ),
+        child: _userData != null
+            ? Column(
+                children: [
+                  GestureDetector(
+                    onTap: pickImage,
+                    child: CircleAvatar(
+                      radius: 50,
+                      backgroundImage: _profileImage != null
+                          ? FileImage(_profileImage!)
+                          : const AssetImage('assets/default_profile.png')
+                              as ImageProvider,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  _buildProfileField("Full Name", _userData!['fullname']),
+                  _buildProfileField("Email", _userData!['email']),
+                  _buildProfileField("Address", _userData!['address']),
+                ],
+              )
+            : const Center(child: CircularProgressIndicator()),
       ),
     );
   }
 
-  // Method to create profile fields
+  // Widget to build each profile field
   Widget _buildProfileField(String label, String value) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
-import '../../utils/slider.dart';
+import '../contacts/emergency_red_btn.dart';
 import '../emergency_btn_screen.dart';
-import '../home_screen.dart';
+import '../news/pages/news_page.dart';
 import 'widgets/quote_widget.dart';
 
 class HomeMainScreen extends StatelessWidget {

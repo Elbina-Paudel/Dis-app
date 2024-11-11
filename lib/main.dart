@@ -1,4 +1,4 @@
-import 'package:disaster_app/screen/home_screen.dart';
+import 'package:disaster_app/screen/my_app.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -11,6 +11,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
   Hive.registerAdapter(EmergencyContactModelAdapter());
+  await Hive.openBox('userProfile');
   if (kIsWeb) {
     await Firebase.initializeApp(
       options: const FirebaseOptions(

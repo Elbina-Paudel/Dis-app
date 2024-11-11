@@ -2,6 +2,7 @@ import 'package:disaster_app/helper/url_helper.dart';
 import 'package:disaster_app/screen/contacts/model/emergency_contact_model.dart';
 import 'package:disaster_app/screen/contacts/service/emergency_contact_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:gap/gap.dart';
 
 import 'add_emergency_contact.dart';
@@ -100,21 +101,41 @@ class ContactScreenState extends State<ContactScreen> {
                       itemCount: data.length,
                       itemBuilder: (context, index) {
                         final items = data[index];
-                        return ListTile(
-                          title: Text(items.fullname ?? ""),
-                          subtitle: Text('${items.number}'),
-                          trailing: Row(
-                            mainAxisSize: MainAxisSize.min,
+                        return Slidable(
+                          key: const ValueKey(0),
+                          startActionPane: ActionPane(
+                            // A motion is a widget used to control how the pane animates.
+                            motion: const ScrollMotion(),
+
+                            // A pane can dismiss the Slidable.
+                            dismissible: DismissiblePane(onDismissed: () {}),
+
+                            // All actions are defined in the children parameter.
                             children: [
-                              IconButton(
-                                onPressed: () => callNumber("${items.number}"),
-                                icon: const Icon(Icons.phone),
+                              // A SlidableAction can have an icon and/or a label.
+                              SlidableAction(
+                                onPressed: (_) {},
+                                backgroundColor: const Color(0xFFFE4A49),
+                                foregroundColor: Colors.white,
+                                icon: Icons.delete,
+                                label: 'Delete',
                               ),
-                              IconButton(
-                                onPressed: () {},
-                                icon: const Icon(Icons.edit),
+                              SlidableAction(
+                                onPressed: (_) {},
+                                backgroundColor: const Color(0xFF21B7CA),
+                                foregroundColor: Colors.white,
+                                icon: Icons.edit,
+                                label: 'Share',
                               ),
                             ],
+                          ),
+                          child: ListTile(
+                            title: Text(items.fullname ?? ""),
+                            subtitle: Text('${items.number}'),
+                            trailing: IconButton(
+                              onPressed: () => callNumber("${items.number}"),
+                              icon: const Icon(Icons.phone),
+                            ),
                           ),
                         );
                       });

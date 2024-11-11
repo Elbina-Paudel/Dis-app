@@ -99,65 +99,59 @@ class ChatPageState extends State<ChatPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Disaster Chat Bot'),
-      ),
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView.builder(
-              itemCount: _messages.length,
-              itemBuilder: (context, index) {
-                final message = _messages[index];
-                final isUserMessage = message['sender'] == 'User';
-                return Container(
-                  alignment: isUserMessage
-                      ? Alignment.centerRight
-                      : Alignment.centerLeft,
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-                  child: Container(
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: isUserMessage ? Colors.blue : Colors.grey[300],
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Text(
-                      message['text']!,
-                      style: TextStyle(
-                        color: isUserMessage ? Colors.white : Colors.black,
-                      ),
+    return Column(
+      children: [
+        Expanded(
+          child: ListView.builder(
+            itemCount: _messages.length,
+            itemBuilder: (context, index) {
+              final message = _messages[index];
+              final isUserMessage = message['sender'] == 'User';
+              return Container(
+                alignment: isUserMessage
+                    ? Alignment.centerRight
+                    : Alignment.centerLeft,
+                padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                child: Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: isUserMessage ? Colors.blue : Colors.grey[300],
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Text(
+                    message['text']!,
+                    style: TextStyle(
+                      color: isUserMessage ? Colors.white : Colors.black,
                     ),
                   ),
-                );
-              },
-            ),
+                ),
+              );
+            },
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: _controller,
-                    decoration: const InputDecoration(
-                      hintText: 'Type your message...',
-                    ),
-                    onSubmitted: (value) {
-                      _sendMessage();
-                    },
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            children: [
+              Expanded(
+                child: TextField(
+                  controller: _controller,
+                  decoration: const InputDecoration(
+                    hintText: 'Type your message...',
                   ),
+                  onSubmitted: (value) {
+                    _sendMessage();
+                  },
                 ),
-                IconButton(
-                  icon: const Icon(Icons.send),
-                  onPressed: _sendMessage,
-                ),
-              ],
-            ),
+              ),
+              IconButton(
+                icon: const Icon(Icons.send),
+                onPressed: _sendMessage,
+              ),
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

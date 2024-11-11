@@ -1,8 +1,9 @@
 import 'dart:io';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:disaster_app/screen/Pages/gamezone.dart';
 import 'package:disaster_app/screen/Pages/logout.dart';
 import 'package:disaster_app/screen/Pages/settings.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -21,6 +22,28 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
   File? _profileImage;
+  String? _username;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchUsername();
+  }
+
+  Future<void> _fetchUsername() async {
+    final userId = _auth.currentUser?.uid;
+    if (userId != null) {
+      final userDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .get();
+      setState(() {
+        _username = userDoc['username'] ?? 'No username';
+      });
+    }
+  }
+
   void bottomNavIndex(int index) {
     setState(() {
       _currentIndex = index;
@@ -46,8 +69,10 @@ class _HomeScreenState extends State<HomeScreen> {
           child: ListView(
             children: [
               UserAccountsDrawerHeader(
-                accountName: const Text("Elbina Paudel"),
-                accountEmail: const Text("elbinapaudel@gmail.com"),
+                accountName: Text(_username ?? "Loading..."),
+                accountEmail: Text(
+                  _auth.currentUser?.email ?? "No email",
+                ),
                 currentAccountPicture: GestureDetector(
                   onTap: pickImage,
                   child: CircleAvatar(

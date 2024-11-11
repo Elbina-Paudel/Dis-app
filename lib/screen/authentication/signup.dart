@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:gap/gap.dart';
 
 import '../../constants/app_colors.dart';
@@ -17,7 +18,9 @@ class SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController _fullnameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _addressController = TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   bool _isHidden = true;
   bool _isLoading = false;
@@ -27,15 +30,23 @@ class SignUpScreenState extends State<SignUpScreen> {
       _isLoading = true;
     });
     try {
-      final user = await _auth.createUserWithEmailAndPassword(
+      final userCredential = await _auth.createUserWithEmailAndPassword(
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
       );
-      if (user.user != null) {
+
+      if (userCredential.user != null) {
+        // Store user information in Firestore
+        await _firestore.collection('users').doc(userCredential.user!.uid).set({
+          'email': _emailController.text.trim(),
+          'fullname': _fullnameController.text.trim(),
+          'address': _addressController.text.trim(),
+        });
+
         Navigator.pushReplacementNamed(context, '/auth');
       }
     } catch (e) {
-      debugPrint('Error: $e'); // Use debugPrint instead of print
+      debugPrint('Error: $e');
     } finally {
       setState(() {
         _isLoading = false;
@@ -80,82 +91,83 @@ class SignUpScreenState extends State<SignUpScreen> {
               ? const Center(
                   child: CircularProgressIndicator(),
                 )
-              : Expanded(
-                  child: Container(
-                    // height: MediaQuery.of(context).size.height - 300,
-                    padding: const EdgeInsets.all(24),
-                    decoration: BoxDecoration(
-                      color: AppColors.instance.darkBrown,
-                      borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(32),
-                        topRight: Radius.circular(32),
+              : Container(
+                  padding: const EdgeInsets.all(24),
+                  decoration: BoxDecoration(
+                    color: AppColors.instance.darkBrown,
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(32),
+                      topRight: Radius.circular(32),
+                    ),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Sign Up",
+                        style: TextStyle(
+                          color: AppColors.instance.whiteColor,
+                          fontSize: 40,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Sign Up",
-                          style: TextStyle(
-                            color: AppColors.instance.whiteColor,
-                            fontSize: 40,
-                            fontWeight: FontWeight.bold,
+                      const Gap(24),
+                      AuthTextField(
+                        labelText: "Fullname",
+                        hintText: "Enter Your Name",
+                        controller: _fullnameController,
+                      ),
+                      const Gap(16),
+                      AuthTextField(
+                        labelText: "Email",
+                        hintText: "Enter Your email",
+                        controller: _emailController,
+                      ),
+                      const Gap(16),
+                      AuthTextField(
+                        labelText: "Address", // New address field
+                        hintText: "Enter Your Address",
+                        controller: _addressController,
+                      ),
+                      const Gap(16),
+                      AuthTextField(
+                        labelText: "Password",
+                        hintText: "Enter Your Password",
+                        isObscureText: _isHidden,
+                        controller: _passwordController,
+                        suffixIcon: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              _isHidden = !_isHidden;
+                            });
+                          },
+                          icon: Icon(
+                            _isHidden ? Icons.visibility : Icons.visibility_off,
                           ),
                         ),
-                        const Gap(24),
-                        AuthTextField(
-                          labelText: "Fullname",
-                          hintText: "Enter Your Name",
-                          controller: _fullnameController,
+                      ),
+                      const Gap(32),
+                      Center(
+                        child: AppButton(
+                          btnTxt: "Register",
+                          onTap: _signUp,
                         ),
-                        const Gap(16),
-                        AuthTextField(
-                          labelText: "Email",
-                          hintText: "Enter Your email",
-                          controller: _emailController,
-                        ),
-                        const Gap(16),
-                        AuthTextField(
-                          labelText: "Password",
-                          hintText: "Enter Your Password",
-                          isObscureText: _isHidden,
-                          controller: _passwordController,
-                          suffixIcon: IconButton(
-                            onPressed: () {
-                              setState(() {
-                                _isHidden = !_isHidden;
-                              });
-                            },
-                            icon: Icon(
-                              _isHidden
-                                  ? Icons.visibility
-                                  : Icons.visibility_off,
+                      ),
+                      const Gap(16),
+                      Center(
+                        child: TextButton(
+                          onPressed: () {
+                            Navigator.pushReplacementNamed(context, '/login');
+                          },
+                          child: Text(
+                            'Go Back? Sign in',
+                            style: TextStyle(
+                              color: AppColors.instance.whiteColor,
                             ),
                           ),
                         ),
-                        const Gap(32),
-                        Center(
-                          child: AppButton(
-                            btnTxt: "Register",
-                            onTap: _signUp,
-                          ),
-                        ),
-                        const Gap(16),
-                        Center(
-                          child: TextButton(
-                            onPressed: () {
-                              Navigator.pushReplacementNamed(context, '/login');
-                            },
-                            child: Text(
-                              'Go Back? Sign in',
-                              style: TextStyle(
-                                color: AppColors.instance.whiteColor,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
         ],

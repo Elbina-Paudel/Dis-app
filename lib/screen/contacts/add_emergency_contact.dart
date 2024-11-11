@@ -41,6 +41,7 @@ class _AddEmergencyContactState extends State<AddEmergencyContact> {
               const Gap(24),
               TextFormField(
                 controller: _fullname,
+                keyboardType: TextInputType.name,
                 decoration: const InputDecoration(
                   hintText: "Enter Fullname",
                   labelText: "Fullname",
@@ -50,6 +51,7 @@ class _AddEmergencyContactState extends State<AddEmergencyContact> {
               const Gap(24),
               TextFormField(
                 controller: _number,
+                keyboardType: TextInputType.number,
                 decoration: const InputDecoration(
                   hintText: "Enter Contact",
                   labelText: "Contact",
@@ -59,6 +61,7 @@ class _AddEmergencyContactState extends State<AddEmergencyContact> {
               const Gap(24),
               TextFormField(
                 controller: _address,
+                keyboardType: TextInputType.text,
                 decoration: const InputDecoration(
                   hintText: "Address",
                   labelText: "Enter Address",
