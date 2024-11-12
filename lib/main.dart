@@ -1,3 +1,4 @@
+import 'package:disaster_app/screen/contacts/model/close_contact_model.dart';
 import 'package:disaster_app/screen/my_app.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -11,16 +12,19 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
   Hive.registerAdapter(EmergencyContactModelAdapter());
+  Hive.registerAdapter(CloseContactModelAdapter());
+
   await Hive.openBox('userProfile');
   if (kIsWeb) {
     await Firebase.initializeApp(
       options: const FirebaseOptions(
-          apiKey: "AIzaSyA7nEpZ5CAhQbEjye2NP1JgG9y30A-MSj0",
-          authDomain: "disaster-app-514de.firebaseapp.com",
-          projectId: "disaster-app-514de",
-          storageBucket: "disaster-app-514de.appspot.com",
-          messagingSenderId: "555748240899",
-          appId: "1:555748240899:web:2f6f5353b50f8cd77f2836"),
+        apiKey: "AIzaSyA7nEpZ5CAhQbEjye2NP1JgG9y30A-MSj0",
+        authDomain: "disaster-app-514de.firebaseapp.com",
+        projectId: "disaster-app-514de",
+        storageBucket: "disaster-app-514de.appspot.com",
+        messagingSenderId: "555748240899",
+        appId: "1:555748240899:web:2f6f5353b50f8cd77f2836",
+      ),
     );
   } else {
     await Firebase.initializeApp();

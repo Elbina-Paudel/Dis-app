@@ -1,10 +1,13 @@
 import 'dart:io';
 
+import 'package:disaster_app/screen/Pages/close_one_widget.dart';
 import 'package:disaster_app/widgets/home_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
+
+import '../contacts/service/close_contact_service.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -57,21 +60,74 @@ class ProfilePageState extends State<ProfilePage> {
         padding: const EdgeInsets.all(16.0),
         child: _userData != null
             ? Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   GestureDetector(
                     onTap: pickImage,
-                    child: CircleAvatar(
-                      radius: 50,
-                      backgroundImage: _profileImage != null
-                          ? FileImage(_profileImage!)
-                          : const AssetImage('assets/default_profile.png')
-                              as ImageProvider,
+                    child: Center(
+                      child: CircleAvatar(
+                        radius: 50,
+                        backgroundImage: _profileImage != null
+                            ? FileImage(_profileImage!)
+                            : const NetworkImage('https://placehold.co/600x400')
+                                as ImageProvider,
+                      ),
                     ),
                   ),
                   const SizedBox(height: 20),
                   _buildProfileField("Full Name", _userData!['fullname']),
                   _buildProfileField("Email", _userData!['email']),
                   _buildProfileField("Address", _userData!['address']),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        "Close One",
+                        style: TextStyle(
+                          fontSize: 18,
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () {
+                          showModalBottomSheet(
+                            context: context,
+                            builder: (context) => const CloseOneWidget(),
+                          );
+                        },
+                        icon: const Icon(Icons.add),
+                      ),
+                    ],
+                  ),
+                  FutureBuilder(
+                    future: CloseContactService().getAllContact(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasError) {
+                        return const Text("Error");
+                      }
+                      if (snapshot.hasData) {
+                        return snapshot.data!.isEmpty
+                            ? const Center(
+                                child: Text("Nothing to Display"),
+                              )
+                            : Expanded(
+                                child: ListView.builder(
+                                  itemCount: snapshot.data!.length,
+                                  itemBuilder: (context, index) {
+                                    return ListTile(
+                                      title: Text(
+                                        snapshot.data![index].username
+                                            .toString(),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              );
+                      }
+                      return const Center(
+                        child: Text("Loading..."),
+                      );
+                    },
+                  ),
                 ],
               )
             : const Center(child: CircularProgressIndicator()),

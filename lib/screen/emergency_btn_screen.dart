@@ -1,8 +1,9 @@
 import 'package:disaster_app/screen/caller.dart';
+import 'package:disaster_app/utils/viewmap.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
-import '../utils/viewmap.dart';
+import 'contacts/service/close_contact_service.dart';
 
 class EmergencyBtnScreen extends StatelessWidget {
   const EmergencyBtnScreen({super.key});
@@ -28,7 +29,6 @@ class EmergencyBtnScreen extends StatelessWidget {
       {
         "title": "Close One",
         "image": "assets/phone.png",
-        "number": "+9779846091133",
       },
       {
         "title": "View Map",
@@ -48,14 +48,24 @@ class EmergencyBtnScreen extends StatelessWidget {
         itemBuilder: (context, index) {
           final item = items[index];
           return InkWell(
-            onTap: () => item["title"] == "View Map"
-                ? Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const MapView(),
-                    ),
-                  )
-                : Caller.callNumber(item['number']),
+            onTap: () async {
+              if (item['title'] == "View Map") {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const MapView(),
+                  ),
+                );
+              } else if (item['title'] == "Close One") {
+                final data = await CloseContactService().getAllContact();
+                data.forEach((value) {
+                  debugPrint(value.number.toString());
+                  Caller.callNumber(value.number.toString());
+                });
+              } else {
+                Caller.callNumber(item['number']);
+              }
+            },
             child: Card(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
